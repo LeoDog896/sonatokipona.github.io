@@ -665,7 +665,7 @@ const arr: DictionaryEntry[] = [
 		  "flat and bendable thing, e.g. paper, card, ticket"
 		]
 	  ],
-	  "translation": "paper-like"
+	  "translation": "flat"
 	},
 	{
 	  "word": "loje",
