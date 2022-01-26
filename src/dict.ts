@@ -1,4 +1,4 @@
-interface DictionaryEntry {
+export interface DictionaryEntry {
 	word: string;
 	meanings: string[][]
 	translation?: string

@@ -2,26 +2,31 @@
 	import dict from "./dict"
 	import Tailwindcss from "./Tailwindcss.svelte"
 
-	let value: string = ""
-	
-	function processValue(value: string) {
-		if (value == "") return ""
+	let value: string
 
-		return value.toLowerCase().split("\n").map(line => {
-			return line.toLowerCase().split(/(, ?|\? ?|: ?|\. ?|\n| )/).filter(it => it).map(word => {
-				const foundReplacement = dict.filter(entry => entry.word == word)
-
-				if (foundReplacement.length == 0) {
-					return word
-				} else {
-					if (foundReplacement[0].translation != null) return foundReplacement[0].translation
-					return `[${foundReplacement[0].meanings[0][1]}]`
-				}
-			}).join("  ")
-		}).join("<br/><br/>")
+	function generateComponent(content: string): string {
+		return `<span style="background-color: rgba(158, 218, 240, 0.5);" data-gramm="false">${content}</span>`
 	}
 
+	function contentToHTML(content: string): string {
+
+		return dict.reduce((previousValue: string, currentValue) => {
+			return previousValue.replace(new RegExp("\\b" + currentValue.word + "\\b", "g"), generateComponent(currentValue.word))
+		}, content
+			.replaceAll('&', '&amp;')
+			.replaceAll('<', '&lt;')
+			.replaceAll('>', '&gt;')
+			.replaceAll('"', '&quot;')
+			.replaceAll("'", '&#039;')
+		)
+	}
 </script>
 <Tailwindcss />
-<textarea class="resize-none w-full h-1/2" bind:value={value}/>
-<p>{@html processValue(value)}</p>
+<textarea 
+	placeholder="Enter Toki Pona..."
+	id="editing"
+	spellcheck="false"
+	bind:value={value}
+	class="text-transparent bg-transparent w-screen h-screen caret-black fixed left-0 top-0 z-0"
+></textarea>
+<p class="fixed left-0 top-0 z-10">{@html value ? contentToHTML(value) : ""}</p>
