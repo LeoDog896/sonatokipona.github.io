@@ -4,29 +4,24 @@
 	import tippy from "sveltejs-tippy";
 
 	let content: string
-
-	$: parsedContent = content ? content
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;')
-		.replaceAll('"', '&quot;')
-		.replaceAll("'", '&#039;') : ""
+	let area: HTMLTextAreaElement
 </script>
 <Tailwindcss />
 <textarea 
 	placeholder="Enter Toki Pona..."
 	spellcheck="false"
 	bind:value={content}
+	bind:this={area}
 	data-gramm="false"
-	class="resize-none font-text text-transparent outline-none bg-transparent w-screen h-screen caret-black fixed p-10 left-0 top-0 z-0"
+	class="resize-none font-text text-transparent outline-none bg-transparent w-screen h-screen whitespace-normal caret-black fixed p-10 left-0 top-0"
 ></textarea>
-<p class="fixed font-text left-0 top-0 p-10 z-10">
-	{#if parsedContent}
-		{#each parsedContent.split("\n") as splitContentLine}
+<p class="fixed font-text left-0 top-0 p-10 cursor-text select-none w-screen h-screen whitespace-normal" on:click={() => area.focus()}>
+	{#if content}
+		{#each content.split("\n") as splitContentLine}
 			{#each parser(splitContentLine) as parsedContentLine}
 				{#if parsedContentLine.dictionaryEntry}
 					<span
-						class="bg-blue-100"
+						class="bg-blue-100/50"
 						use:tippy={{
 							content: `<span style="font-family: 'Montserrat', sans-serif;">${parsedContentLine.dictionaryEntry.translation}</span>`,
 							allowHTML: true,

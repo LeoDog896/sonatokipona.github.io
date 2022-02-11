@@ -10,9 +10,13 @@ export function parser(string: string): Element[] {
 
 	if (!string) return []
 
-	return string.split(/ /).filter(it => it).map((it, index, arr) => {
+	return string.split(/(\s+)/).map((it, index, arr) => {
 
-		const foundWords = dict.filter(entry => new RegExp("\\b" + entry.word + "\\b").test(it))
+		if (!it) return {
+			content: it
+		}
+
+		const foundWords = dict.filter(entry => new RegExp("\\b" + entry.word + "\\b", "i").test(it))
 
 		if (foundWords.length >= 1) {
 
