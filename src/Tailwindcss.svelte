@@ -1,4 +1,5 @@
 <style global>
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 	@tailwind base;
 	@tailwind components;
 	@tailwind utilities;

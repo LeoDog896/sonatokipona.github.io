@@ -16,6 +16,9 @@ module.exports = {
 			effects: "box-shadow, background-color"
 		}
 	  },
+	  fontFamily: {
+		  "text": "'Montserrat', sans-serif"
+	  }
 	},
 	plugins: [],
   }

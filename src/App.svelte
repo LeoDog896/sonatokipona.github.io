@@ -18,9 +18,9 @@
 	spellcheck="false"
 	bind:value={content}
 	data-gramm="false"
-	class="resize-none text-transparent outline-none bg-transparent w-screen h-screen caret-black fixed p-10 left-0 top-0 z-0"
+	class="resize-none font-text text-transparent outline-none bg-transparent w-screen h-screen caret-black fixed p-10 left-0 top-0 z-0"
 ></textarea>
-<p class="fixed left-0 top-0 p-10 z-10">
+<p class="fixed font-text left-0 top-0 p-10 z-10">
 	{#if parsedContent}
 		{#each parsedContent.split("\n") as splitContentLine}
 			{#each parser(splitContentLine) as parsedContentLine}
@@ -28,7 +28,7 @@
 					<span
 						class="bg-blue-100"
 						use:tippy={{
-							content: `${parsedContentLine.dictionaryEntry.translation}`,
+							content: `<span style="font-family: 'Montserrat', sans-serif;">${parsedContentLine.dictionaryEntry.translation}</span>`,
 							allowHTML: true,
 							placement: "bottom"
 						}}
