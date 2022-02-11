@@ -1,32 +1,43 @@
 <script lang="ts">
-	import dict from "./dict"
+	import { parser } from "./parser"
 	import Tailwindcss from "./Tailwindcss.svelte"
+	import tippy from "sveltejs-tippy";
 
-	let value: string
+	let content: string
 
-	function generateComponent(content: string): string {
-		return `<span style="background-color: rgba(158, 218, 240, 0.5);" data-gramm="false">${content}</span>`
-	}
-
-	function contentToHTML(content: string): string {
-
-		return dict.reduce((previousValue: string, currentValue) => {
-			return previousValue.replace(new RegExp("\\b" + currentValue.word + "\\b", "g"), generateComponent(currentValue.word))
-		}, content
-			.replaceAll('&', '&amp;')
-			.replaceAll('<', '&lt;')
-			.replaceAll('>', '&gt;')
-			.replaceAll('"', '&quot;')
-			.replaceAll("'", '&#039;')
-		)
-	}
+	$: parsedContent = content ? content
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#039;') : ""
 </script>
 <Tailwindcss />
 <textarea 
 	placeholder="Enter Toki Pona..."
-	id="editing"
 	spellcheck="false"
-	bind:value={value}
-	class="text-transparent bg-transparent w-screen h-screen caret-black fixed left-0 top-0 z-0"
+	bind:value={content}
+	data-gramm="false"
+	class="resize-none text-transparent outline-none bg-transparent w-screen h-screen caret-black fixed p-10 left-0 top-0 z-0"
 ></textarea>
-<p class="fixed left-0 top-0 z-10">{@html value ? contentToHTML(value) : ""}</p>
+<p class="fixed left-0 top-0 p-10 z-10">
+	{#if parsedContent}
+		{#each parsedContent.split("\n") as splitContentLine}
+			{#each parser(splitContentLine) as parsedContentLine}
+				{#if parsedContentLine.dictionaryEntry}
+					<span
+						class="bg-blue-100"
+						use:tippy={{
+							content: `${parsedContentLine.dictionaryEntry.translation}`,
+							allowHTML: true,
+							placement: "bottom"
+						}}
+					>{parsedContentLine.content}</span>
+				{:else}
+					<span>{parsedContentLine.content}</span>
+				{/if}
+			{/each}
+			<br/>
+		{/each}
+	{/if}
+</p>
